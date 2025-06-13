@@ -1,0 +1,41 @@
+version: '3.8'
+
+services:
+  db:
+    image: postgres:15
+    environment:
+      POSTGRES_DB: banking_db
+      POSTGRES_USER: banking_user
+      POSTGRES_PASSWORD: banking_pass
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  api:
+    build: .
+    ports:
+      - "8000:8000"
+    environment:
+      DATABASE_URL: postgresql://banking_user:banking_pass@db:5432/banking_db
+      SECRET_KEY: your-super-secret-key-change-in-production
+    depends_on:
+      - db
+    volumes:
+      - .:/app
+    command: uvicorn main:app --host 0.0.0.0 --port 8000 --reload
+
+volumes:
+  postgres_data:
+    driver: local
+networks:
+  default:
+    driver: bridge
+# Note: Make sure to replace 'your-super-secret-key-change-in-production' with a secure key in production.
+# To run the application, use the command: docker-compose up --build
+# To stop the application, use the command: docker-compose down
+# To access the API, navigate to http://localhost:8000 in your browser or use a tool like Postman.
+# To run database migrations, you can add a service or run them manually after starting the containers.
+# Example command to run migrations manually:
+# docker-compose exec api alembic upgrade head
+# To run tests, you can add a service or run them manually after starting the containers. 

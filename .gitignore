@@ -1,0 +1,22 @@
+# Environment variables
+.env
+
+# Virtual environment
+banking_env/
+venv/
+
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+
+# IDE files
+.vscode/
+.idea/
+
+# Database
+*.db
+*.sqlite3
+
+# Logs
+*.log
